@@ -1,63 +1,62 @@
 package com.example.demo;
 
-import com.example.demo.activemq.JmsComponent;
-import com.example.demo.activemq.Message;
-import com.example.demo.sendmail.MailService;
+import com.example.demo.entity.MyWebSocket;
+import com.example.demo.entity.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.channel.Channel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.yeauty.annotation.OnMessage;
+import org.yeauty.pojo.Session;
 
-import java.io.File;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DemoApplicationTests {
 
 	@Autowired
-	JmsComponent jmsComponent;
+	private RedisTemplate redisTemplate;
+
 	@Test
 	public void contextLoads() {
-		Message msg = new Message();
-		msg.setContent("hello jms!");
-		msg.setDate(new Date());
-		jmsComponent.send(msg);
+
+//		redisTemplate.opsForValue().set("Test:set1", "testValue1");
+//		redisTemplate.opsForSet().add("Test:set2", "asdf");
+//		redisTemplate.opsForHash().put("hash1", "name1", "lms1");
+//		redisTemplate.opsForHash().put("hash1", "name2", "lms2");
+//		redisTemplate.opsForHash().put("hash1", "name3", "lms3");
+		//对象
+		/*List<User> list = new ArrayList<User>();
+		User user = new User(1,"username");
+		User user1 = new User(2,"username");
+		User user2 = new User(3,"username");
+		list.add(user);
+		list.add(user1);
+		list.add(user2);
+		String[] strings =new String[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			strings[i]=list.get(i).toString();
+		}
+		ObjectMapper mapper = new ObjectMapper();
+
+		redisTemplate.opsForValue().set("user",user);
+		try {
+			redisTemplate.opsForList().leftPushAll("list1",mapper.writeValueAsString(user),mapper.writeValueAsString(user1),mapper.writeValueAsString(user2));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}*/
+		System.out.println(redisTemplate.hasKey("user"));
+		System.out.println(redisTemplate.opsForHash().get("hash1", "name1"));
+
 	}
 
-	@Autowired
-	MailService mailService;
-	@Test
-	public void sendSimpleMail(){
-		mailService.sendSimpleMail("15813489443@163.com",
-				"1197181836@qq.com",
-				"1505815413@qq.com",
-				"测试邮件主题",
-				"测试邮件内容");
-	}
 
-	@Test
-	public void sendAttachFileMail(){
-		mailService.sendAttachFileMail("15813489443@163.com",
-				"1197181836@qq.com",
-				"测试邮件主题",
-				"测试邮件内容",
-				new File("E:\\66.jpg"));
-	}
-
-
-	@Test
-	public void sendMailWithImg() {
-		mailService.sendMailWithImg("15813489443@163.com",
-				"1197181836@qq.com",
-				"测试邮件主题(图片)",
-				"<div>hello,这是一封带图片资源的邮件：" +
-						"这是图片1：<div><img src='cid:p01'/></div>" +
-						"这是图片2：<div><img src='cid:p02'/></div>" +
-						"</div>",
-				new String[]{"E:\\66.jpg",
-						"E:\\66.jpg"},
-				new String[]{"p01", "p02"});
-	}
 }
